@@ -92,8 +92,9 @@ for(i in size_:(nrow(DATA)-size_)){
     POINTS[i-j,LETTERS[j+1]] <- state_
     #POINTS[i,LETTERS[j+1]] <- state_
   }
+  POINTS[i,]$index <- DATA[i,]$Time
 
-  if(i>size_*2 && i<=((nrow(DATA) - size_)+1)){
+  if(i>size_*2 && i<=((nrow(DATA) - size_))){
     POINTS[i-size_,]$state <- (
       tbl_df(
         table(
@@ -110,9 +111,37 @@ for(i in size_:(nrow(DATA)-size_)){
   points(i, DATA[i,]$Head.y, col = color[state_])
 
 }
+POINTS <- POINTS[complete.cases(POINTS),]
 
+#Check if patient is walking straight enough
+differ_ <- 0.4
 
+WALKING <- strtoi(rownames(POINTS[POINTS$state==1,]))
 
+start <- min(WALKING)
+stop <- max(WALKING)
 
+#print(mean(DATA[start:stop,]$Head.y))
 
+segments(start, mean(c(DATA[start,]$Head.y, DATA[stop,]$Head.y)), stop, col = "black")
 
+# for(i in 1:(length(WALKING)/5)-1){
+#   if(i > 1) { i <- i * size_ - (size_-1) }
+#   j <- i-1
+#
+#
+#
+# }
+
+base <- mean(c(DATA[start,]$Head.y, DATA[stop,]$Head.y))
+size_ <- 7
+for(i in seq(start, stop, size_)){
+
+  step <- mean(DATA[i:(i+size_),]$Head.y) - base
+
+  for(j in 0:(size_ -1)){
+    if(POINTS[i+j,]$state != 1) next
+    points(i+j, DATA[i+j,]$Head.y - step, p = "*")
+  }
+
+}
