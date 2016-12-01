@@ -42,6 +42,8 @@ remove(y)
 remove(z)
 remove(cnv_)
 
+print("DATA PREPERATION DONE")
+
 source("code/state.R")
 
 source("code/head.R")

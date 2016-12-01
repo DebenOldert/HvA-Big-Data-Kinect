@@ -1,6 +1,6 @@
 # CALCULATE PATIENT STATE ALGORITHM
 STATE = c("WALK", "UP", "DOWN", "SIT")
-size_ <- 7
+size_ <- 5
 differ_ <- 0.1
 
 POINTS <- data.frame(
@@ -59,9 +59,26 @@ for(i in size_:(nrow(DATA)-size_)){
     POINTS[i-size_,]$probability <- ((1 / size_) * tmp_[1,]$n)
   }
   DATA[i,]$state = state_
-  print(i)
 }
-print("STATE DONE")
+print("STATE CALCULATION DONE")
 remove(tmp_)
 DATA <- DATA[complete.cases(DATA),]
 rownames(DATA) <- 1:nrow(DATA)
+DATA$index = as.integer(rownames(DATA))
+
+WALKING <- strtoi(rownames(DATA[DATA$state==1,]))
+
+# DRAW PARABOLA (FOR CALCULATING STRAIGHT PATH)
+
+yPrediction <-lm(Head.y ~ I(index^2)+index, data=DATA[min(WALKING):max(WALKING),])
+#lines(WALKING, predict(lm2, data.frame(index=WALKING)), type = "l", col = "orange")
+
+yPredicted <- as.vector(predict(yPrediction, data.frame(index=WALKING)))
+
+WALKBASE <- mean(c(yPredicted[1], tail(yPredicted, n=1)))
+
+for(i in WALKING[1]:(length(WALKING) + WALKING[1] - 1)){
+  DATA[i,]$Head.y <- DATA[i,]$Head.y - (yPredicted[i-WALKING[1]+1] - WALKBASE)
+}
+
+plot(POINTS$probability, type = "l")
