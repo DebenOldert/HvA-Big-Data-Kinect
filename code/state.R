@@ -68,14 +68,15 @@ DATA$index = as.integer(rownames(DATA))
 
 WALKING <- strtoi(rownames(DATA[DATA$state==1,]))
 
-# DRAW PARABOLA (FOR CALCULATING STRAIGHT PATH)
+# CALCULATE STRAIGHT WALKING PATH
 
 yPrediction <-lm(Head.y ~ I(index^2)+index, data=DATA[min(WALKING):max(WALKING),])
-#lines(WALKING, predict(lm2, data.frame(index=WALKING)), type = "l", col = "orange")
+#lines(WALKING, predict(yPrediction, data.frame(index=WALKING)), type = "l", col = "orange")
 
 yPredicted <- as.vector(predict(yPrediction, data.frame(index=WALKING)))
 
 WALKBASE <- mean(c(yPredicted[1], tail(yPredicted, n=1)))
+#WALKBASE <- mean(c(DATA[WALKING[1],]$Head.y, DATA[tail(WALKING, n=1),]$Head.y))
 
 for(i in WALKING[1]:(length(WALKING) + WALKING[1] - 1)){
   DATA[i,]$Head.y <- DATA[i,]$Head.y - (yPredicted[i-WALKING[1]+1] - WALKBASE)
