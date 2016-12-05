@@ -39,7 +39,6 @@ for(i in size_:(nrow(DATA)-size_)){
 
   for(j in 0:size_-1){
     POINTS[i-j,LETTERS[j+1]] <- state_
-    #POINTS[i,LETTERS[j+1]] <- state_
   }
   POINTS[i,]$index <- DATA[i,]$Time
 
@@ -69,17 +68,16 @@ DATA$index = as.integer(rownames(DATA))
 WALKING <- strtoi(rownames(DATA[DATA$state==1,]))
 
 # CALCULATE STRAIGHT WALKING PATH
-
 yPrediction <-lm(Head.y ~ I(index^2)+index, data=DATA[min(WALKING):max(WALKING),])
-#lines(WALKING, predict(yPrediction, data.frame(index=WALKING)), type = "l", col = "orange")
-
 yPredicted <- as.vector(predict(yPrediction, data.frame(index=WALKING)))
 
 WALKBASE <- mean(c(yPredicted[1], tail(yPredicted, n=1)))
-#WALKBASE <- mean(c(DATA[WALKING[1],]$Head.y, DATA[tail(WALKING, n=1),]$Head.y))
 
 for(i in WALKING[1]:(length(WALKING) + WALKING[1] - 1)){
   DATA[i,]$Head.y <- DATA[i,]$Head.y - (yPredicted[i-WALKING[1]+1] - WALKBASE)
 }
 
 plot(POINTS$probability, type = "l")
+
+# http://stats.stackexchange.com/questions/30975/how-to-add-non-linear-trend-line-to-a-scatter-plot-in-r
+# http://www.mathsisfun.com/geometry/parabola.html
