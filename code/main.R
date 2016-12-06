@@ -1,9 +1,9 @@
 suppressMessages(library(dplyr))
 suppressMessages(library(stringr))
 
-WD <- getwd()
+source("code/functions.R")
 
-specify_decimal <- function(x, k) format(round(x, k), nsmall=k)
+WD <- getwd()
 
 CSV <- file.choose()
 

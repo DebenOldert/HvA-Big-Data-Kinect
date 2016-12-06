@@ -13,7 +13,7 @@ for(i in 1:nrow(DATA)){
 
 
 #Check if patient is walking fast enough
-differ_ <- 0.1
+differ_ <- 0.5
 
 # Algorithm to calculate walk phase
 f <- function(x) (sin((x - 5) / 2.7) / 30) + WALKBASE

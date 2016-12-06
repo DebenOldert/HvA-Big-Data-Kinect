@@ -67,6 +67,10 @@ DATA$index = as.integer(rownames(DATA))
 
 WALKING <- strtoi(rownames(DATA[DATA$state==1,]))
 
+if(!consistent(WALKING)){
+  stop("Patient not consistently walking, (Maybe he/she fell). Anyway, we can't analyse this data", call. = FALSE)
+}
+
 # CALCULATE STRAIGHT WALKING PATH
 yPrediction <-lm(Head.y ~ I(index^2)+index, data=DATA[min(WALKING):max(WALKING),])
 yPredicted <- as.vector(predict(yPrediction, data.frame(index=WALKING)))
