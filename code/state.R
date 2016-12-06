@@ -65,20 +65,28 @@ DATA <- DATA[complete.cases(DATA),]
 rownames(DATA) <- 1:nrow(DATA)
 DATA$index = as.integer(rownames(DATA))
 
-WALKING <- strtoi(rownames(DATA[DATA$state==1,]))
+# USE PATIENT ENVIRONMENT
+source("code/patient.R")
 
-if(!consistent(WALKING)){
+patient$WALKING <- strtoi(rownames(DATA[DATA$state==1,]))
+patient$SITTING <- group(strtoi(rownames(DATA[DATA$state==4,])), 10)
+patient$UP <- strtoi(rownames(DATA[DATA$state==2,]))
+patient$DOWN <- strtoi(rownames(DATA[DATA$state==3,]))
+
+patient$SITBASE <- mean(c(DATA[as.integer(unlist(patient$SITTING)),]$FootLeft.y, DATA[as.integer(unlist(patient$SITTING)),]$FootRight.y))
+
+if(!consistent(patient$WALKING)){
   stop("Patient not consistently walking, (Maybe he/she fell). Anyway, we can't analyse this data", call. = FALSE)
 }
 
 # CALCULATE STRAIGHT WALKING PATH
-yPrediction <-lm(Head.y ~ I(index^2)+index, data=DATA[min(WALKING):max(WALKING),])
-yPredicted <- as.vector(predict(yPrediction, data.frame(index=WALKING)))
+yPrediction <-lm(Head.y ~ I(index^2)+index, data=DATA[min(patient$WALKING):max(patient$WALKING),])
+yPredicted <- as.vector(predict(yPrediction, data.frame(index=patient$WALKING)))
 
-WALKBASE <- mean(c(yPredicted[1], tail(yPredicted, n=1)))
+patient$WALKBASE <- mean(c(yPredicted[1], tail(yPredicted, n=1)))
 
-for(i in WALKING[1]:(length(WALKING) + WALKING[1] - 1)){
-  DATA[i,]$Head.y <- DATA[i,]$Head.y - (yPredicted[i-WALKING[1]+1] - WALKBASE)
+for(i in patient$WALKING[1]:(length(patient$WALKING) + patient$WALKING[1] - 1)){
+  DATA[i,]$Head.y <- DATA[i,]$Head.y - (yPredicted[i-patient$WALKING[1]+1] - patient$WALKBASE)
 }
 
 plot(POINTS$probability, type = "l")

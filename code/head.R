@@ -16,16 +16,16 @@ for(i in 1:nrow(DATA)){
 differ_ <- 0.5
 
 # Algorithm to calculate walk phase
-f <- function(x) (sin((x - 5) / 2.7) / 30) + WALKBASE
+f <- function(x) (sin((x - 5) / 2.7) / 30) + patient$WALKBASE
 
 # Draw Optimum walk
-lines(WALKING, f(WALKING), col = "orange", type = "l")
+lines(patient$WALKING, f(patient$WALKING), col = "orange", type = "l")
 
 # Check if each point is close to optimum track
-WALK <- data.frame(index=WALKING)
+WALK <- data.frame(index=patient$WALKING)
 WALK$probability <- 0
 
-for(i in WALKING){
+for(i in patient$WALKING){
    prob_ <- 1 - abs((abs(DATA[i,]$Head.y - f(i))) / differ_)
    WALK[WALK$index==i,]$probability <- if(prob_ > 1) 1 else if(prob_ < 0) 0 else prob_
 }
