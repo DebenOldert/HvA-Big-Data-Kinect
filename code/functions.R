@@ -22,6 +22,8 @@ consistent <- function(a) suppressWarnings(all(a == min(a):max(a)))
 #
 # Returns => list, containing consistent integer vectors
 group <- function(a, n=1){
+  a <- sort.int(a, decreasing = FALSE)
+  a <- unique(a)
   if(consistent(a)) return (list(A=a))
   else{
     l_ <- list()
