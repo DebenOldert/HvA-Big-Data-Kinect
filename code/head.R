@@ -10,7 +10,7 @@ plot(DATA$Head.y,
 for(i in 1:nrow(DATA)){
   points(i, DATA[i,]$Head.y, col = color[DATA[i,]$state])
 }
-
+remove(i)
 
 #Check if patient is walking fast enough
 differ_ <- 0.5
@@ -29,7 +29,8 @@ for(i in patient$WALKING){
    prob_ <- 1 - abs((abs(DATA[i,]$Head.y - f(i))) / differ_)
    WALK[WALK$index==i,]$probability <- if(prob_ > 1) 1 else if(prob_ < 0) 0 else prob_
 }
-
+remove(i)
+remove(prob_)
 # Print out possible fall chance
 print(paste("FALL CHANCE BASED ON STEPS: ", as.character(specify_decimal(100-(mean(WALK$probability)*100), 2)), "%", sep = ""))
 

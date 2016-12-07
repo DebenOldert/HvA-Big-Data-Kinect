@@ -46,7 +46,7 @@ group <- function(a, n=1){
       }
       cur_ <- cur_ + 1
     }
-    #for(i in 1:length(l_))
+
     names(l_) <- LETTERS[1:length(l_)]
     remove(cur_)
     return(l_)

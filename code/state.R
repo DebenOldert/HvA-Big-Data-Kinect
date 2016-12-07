@@ -41,6 +41,7 @@ for(i in size_:(nrow(DATA)-size_)){
     POINTS[i-j,LETTERS[j+1]] <- state_
   }
   POINTS[i,]$index <- DATA[i,]$Time
+  remove(j)
 
   if(i>size_*2 && i<=((nrow(DATA) - size_))){
     tmp_ <- (
@@ -59,25 +60,32 @@ for(i in size_:(nrow(DATA)-size_)){
   }
   DATA[i,]$state = state_
 }
-print("STATE CALCULATION DONE")
 remove(tmp_)
+remove(state_)
+remove(i)
+remove(start)
+remove(end)
+
 DATA <- DATA[complete.cases(DATA),]
 rownames(DATA) <- 1:nrow(DATA)
 DATA$index = as.integer(rownames(DATA))
 
+print("STATE CALCULATION DONE")
+
 # USE PATIENT ENVIRONMENT
 source("code/patient.R")
 
-patient$WALKING <- strtoi(rownames(DATA[DATA$state==1,]))
+patient$WALKING <- group(strtoi(rownames(DATA[DATA$state==1,])), 10)
 patient$SITTING <- group(strtoi(rownames(DATA[DATA$state==4,])), 10)
-patient$UP <- strtoi(rownames(DATA[DATA$state==2,]))
-patient$DOWN <- strtoi(rownames(DATA[DATA$state==3,]))
+patient$UP <- group(strtoi(rownames(DATA[DATA$state==2,])), 5)
+patient$DOWN <- group(strtoi(rownames(DATA[DATA$state==3,])), 5)
 
 patient$SITBASE <- mean(c(DATA[as.integer(unlist(patient$SITTING)),]$FootLeft.y, DATA[as.integer(unlist(patient$SITTING)),]$FootRight.y))
 
-if(!consistent(patient$WALKING)){
+if(!consistent(as.integer(unlist(patient$WALKING)))){
   stop("Patient not consistently walking, (Maybe he/she fell). Anyway, we can't analyse this data", call. = FALSE)
 }
+patient$WALKING <- as.integer(unlist(patient$WALKING))
 
 # CALCULATE STRAIGHT WALKING PATH
 yPrediction <-lm(Head.y ~ I(index^2)+index, data=DATA[min(patient$WALKING):max(patient$WALKING),])
@@ -88,8 +96,12 @@ patient$WALKBASE <- mean(c(yPredicted[1], tail(yPredicted, n=1)))
 for(i in patient$WALKING[1]:(length(patient$WALKING) + patient$WALKING[1] - 1)){
   DATA[i,]$Head.y <- DATA[i,]$Head.y - (yPredicted[i-patient$WALKING[1]+1] - patient$WALKBASE)
 }
+remove(yPrediction)
+remove(yPredicted)
 
 plot(POINTS$probability, type = "l")
+
+print("FILLING PATIENT CLASS DONE")
 
 # http://stats.stackexchange.com/questions/30975/how-to-add-non-linear-trend-line-to-a-scatter-plot-in-r
 # http://www.mathsisfun.com/geometry/parabola.html
