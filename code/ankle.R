@@ -14,8 +14,6 @@ highestRight <- max(DATA$AnkleRight.y)
 VerschilLeft <- (lowestLeft - highestLeft)
 VerschilRight <- (lowestRight - highestRight)
 
-
-
 plot(DATA$AnkleLeft.y,
      type = "l",
      ylab = "Hoogte...",
@@ -29,3 +27,7 @@ plot(DATA$AnkleLeft.y,
 #     col = ifelse(DATA$AnkleRight.y > -1.1, "orange", "purple"),
 #     ylim = c(-1.20, -0.8)
 #)
+
+for(i in 1:nrow(DATA)){
+  points(i, DATA[i,]$AnkleLeft.y, col = color[DATA[i,]$state])
+}
