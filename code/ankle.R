@@ -28,6 +28,5 @@ plot(DATA$AnkleLeft.y,
 #     ylim = c(-1.20, -0.8)
 #)
 
-for(i in 1:nrow(DATA)){
-  points(i, DATA[i,]$AnkleLeft.y, col = color[DATA[i,]$state])
-}
+ANKLE <- data.frame(DATA$AnkleLeft.y)
+vd
