@@ -14,5 +14,7 @@ patient <- new.env()
 
   patient$SITBASE <- NULL
 
+  patient$WALKERROR <- NULL
+
 
   patient$height <- function() abs(patient$SITBASE) + patient$WALKBASE

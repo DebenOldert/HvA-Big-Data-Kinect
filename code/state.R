@@ -93,8 +93,15 @@ yPredicted <- as.vector(predict(yPrediction, data.frame(index=patient$WALKING)))
 
 patient$WALKBASE <- mean(c(yPredicted[1], tail(yPredicted, n=1)))
 
+patient$WALKERROR <- yPredicted - patient$WALKBASE
+
 for(i in patient$WALKING[1]:(length(patient$WALKING) + patient$WALKING[1] - 1)){
-  DATA[i,]$Head.y <- DATA[i,]$Head.y - (yPredicted[i-patient$WALKING[1]+1] - patient$WALKBASE)
+  #DATA[i,]$Head.y <- DATA[i,]$Head.y - (yPredicted[i-patient$WALKING[1]+1] - patient$WALKBASE)
+  #DATA[,grep(".y", colnames(DATA))]
+
+  for(j in colnames(DATA[i,grep(".y", colnames(DATA))])){
+    DATA[i,j] <- DATA[i,j] - patient$WALKERROR[i - patient$WALKING[1] + 1]
+  }
 }
 remove(yPrediction)
 remove(yPredicted)
