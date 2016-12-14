@@ -1,4 +1,4 @@
-print("START ANALYZING HEAD")
+Console.NewLine("START ANALYZING HEAD")
 color <- c("red", "blue", "blue", "green")
 
 #Plot graph
@@ -32,6 +32,6 @@ for(i in patient$WALKING){
 remove(i)
 remove(prob_)
 # Print out possible fall chance
-print(paste("FALL CHANCE BASED ON STEPS: ", as.character(specify_decimal(100-(mean(WALK$probability)*100), 2)), "%", sep = ""))
+Console.NewLine(paste("FALL CHANCE BASED ON STEPS: ", as.character(specify_decimal(100-(mean(WALK$probability)*100), 2)), "%", sep = ""))
 
-print("DONE ANALYZING HEAD")
+Console.NewLine("DONE ANALYZING HEAD")

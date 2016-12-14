@@ -70,7 +70,7 @@ DATA <- DATA[complete.cases(DATA),]
 rownames(DATA) <- 1:nrow(DATA)
 DATA$index = as.integer(rownames(DATA))
 
-print("STATE CALCULATION DONE")
+Console.NewLine("STATE CALCULATION DONE")
 
 # USE PATIENT ENVIRONMENT
 source("code/patient.R")
@@ -108,7 +108,7 @@ remove(yPredicted)
 
 plot(POINTS$probability, type = "l")
 
-print("FILLING PATIENT CLASS DONE")
+Console.NewLine("FILLING PATIENT CLASS DONE")
 
 # http://stats.stackexchange.com/questions/30975/how-to-add-non-linear-trend-line-to-a-scatter-plot-in-r
 # http://www.mathsisfun.com/geometry/parabola.html

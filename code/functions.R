@@ -54,3 +54,23 @@ group <- function(a, n=1){
     return(l_)
   }
 }
+
+# Console.NewLine. Write string to console and appends a new line
+#   a => string to output
+#
+# Returns => void, but prints in console with appended newline
+
+Console.NewLine <- function(a){
+  Console.Line(a)
+  cat("\n")
+}
+
+# Console.Line. Write string to console
+#   a => string to output
+#
+# Returns => void, but prints in console
+
+Console.Line <- function(a){
+  cat(a)
+}
+

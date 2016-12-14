@@ -1,5 +1,6 @@
 suppressMessages(library(dplyr))
 suppressMessages(library(stringr))
+suppressMessages(library(crayon))
 
 source("code/functions.R")
 
@@ -42,7 +43,7 @@ remove(y)
 remove(z)
 remove(cnv_)
 
-print("DATA PREPERATION DONE")
+Console.NewLine("DATA PREPERATION DONE")
 
 source("code/state.R")
 
