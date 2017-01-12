@@ -48,5 +48,5 @@ Console.NewLine("DATA PREPERATION DONE")
 source("code/state.R")
 
 source("code/head.R")
-#source("code/ankle.R")
-#source("code/back.R")
+source("code/ankle.R")
+source("code/back.R")
